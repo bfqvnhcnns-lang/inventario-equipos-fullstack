@@ -1,0 +1,66 @@
+.table-responsive {
+  overflow-x: auto;
+}
+
+.table-responsive table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table-responsive thead {
+  background: #f7fafc;
+}
+
+.table-responsive th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.table-responsive td {
+  padding: 15px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #555;
+}
+
+.table-responsive tbody tr:hover {
+  background: #f7fafc;
+}
+
+.table-responsive .actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-operativo {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.status-en-mantenimiento {
+  background: #bee3f8;
+  color: #2c5282;
+}
+
+.status-dañado {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.status-inactivo {
+  background: #e2e8f0;
+  color: #2d3748;
+}
