@@ -1,0 +1,15 @@
+{
+  "name": "inventario-equipos-root",
+  "version": "1.0.0",
+  "description": "Equipment Inventory Management System - Monorepo",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=backend & npm run dev --workspace=frontend",
+    "build": "npm run build --workspace=backend && npm run build --workspace=frontend",
+    "start": "npm run start --workspace=backend"
+  }
+}

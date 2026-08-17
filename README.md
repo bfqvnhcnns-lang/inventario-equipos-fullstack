@@ -1,0 +1,296 @@
+# Gestión de Inventario de Equipos de Cómputo
+
+Sistema web completo de CRUD para la gestión del inventario de equipos de laboratorio, desarrollado con TypeScript, Express, React, PostgreSQL y Docker.
+
+## 🎯 Características
+
+- ✅ **CRUD Completo**: Crear, leer, actualizar y eliminar equipos
+- ✅ **API REST**: Endpoints bien documentados con Swagger/OpenAPI
+- ✅ **Frontend Responsivo**: Interfaz intuitiva con React + TypeScript
+- ✅ **Base de Datos**: PostgreSQL con Prisma ORM
+- ✅ **Dockerizado**: Completamente containerizado con docker-compose
+- ✅ **TypeScript Estricto**: Sin uso de `any`, tipos bien definidos
+
+## 📋 Requisitos Previos
+
+- [Docker](https://www.docker.com/) y [Docker Compose](https://docs.docker.com/compose/)
+- Node.js 20+ (solo si deseas ejecutar localmente sin Docker)
+
+## 🚀 Inicio Rápido
+
+### Con Docker (Recomendado)
+
+```bash
+# 1. Clonar el repositorio
+git clone <tu-repositorio-url>
+cd Prueba_IIAP
+
+# 2. Crear archivo .env (opcional, ya incluye valores por defecto)
+cp .env.example .env
+
+# 3. Levantar toda la aplicación
+docker-compose up --build
+```
+
+La aplicación estará disponible en:
+- **Frontend**: http://localhost:5173
+- **API**: http://localhost:3000/api
+- **Documentación Swagger**: http://localhost:3000/api/docs
+- **Base de Datos**: localhost:5432
+
+### Sin Docker (Desarrollo Local)
+
+#### Backend
+
+```bash
+# 1. Navegar al directorio backend
+cd backend
+
+# 2. Instalar dependencias
+npm install
+
+# 3. Configurar variables de entorno
+cp .env.example .env
+# Editar .env y configurar DATABASE_URL apuntando a tu PostgreSQL local
+
+# 4. Ejecutar migraciones de Prisma
+npm run migrate
+
+# 5. Iniciar el servidor
+npm run dev
+```
+
+El backend estará disponible en `http://localhost:3000`
+
+#### Frontend
+
+```bash
+# 1. En otra terminal, navegar al directorio frontend
+cd frontend
+
+# 2. Instalar dependencias
+npm install
+
+# 3. Iniciar el servidor de desarrollo
+npm run dev
+```
+
+El frontend estará disponible en `http://localhost:5173`
+
+## 📚 Documentación de API
+
+La documentación interactiva de Swagger está disponible en:
+
+```
+http://localhost:3000/api/docs
+```
+
+### Endpoints Disponibles
+
+#### Listar Equipos
+```
+GET /api/equipos
+```
+
+#### Obtener Equipo por ID
+```
+GET /api/equipos/:id
+```
+
+#### Crear Nuevo Equipo
+```
+POST /api/equipos
+Content-Type: application/json
+
+{
+  "nombre": "Laptop",
+  "marca": "Dell",
+  "estado": "Operativo",
+  "numeroSerie": "SN123456",
+  "descripcion": "Laptop de desarrollo"
+}
+```
+
+#### Actualizar Equipo
+```
+PUT /api/equipos/:id
+Content-Type: application/json
+
+{
+  "nombre": "Laptop",
+  "marca": "Dell",
+  "estado": "En Mantenimiento",
+  "numeroSerie": "SN123456",
+  "descripcion": "Laptop de desarrollo - actualizado"
+}
+```
+
+#### Eliminar Equipo
+```
+DELETE /api/equipos/:id
+```
+
+## 🏗️ Estructura del Proyecto
+
+```
+Prueba_IIAP/
+├── backend/                      # API REST con Express
+│   ├── src/
+│   │   └── main.ts             # Punto de entrada
+│   ├── prisma/
+│   │   └── schema.prisma       # Esquema de base de datos
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── .env.example
+├── frontend/                     # Aplicación React con Vite
+│   ├── src/
+│   │   ├── App.tsx             # Componente principal
+│   │   ├── App.css             # Estilos
+│   │   ├── main.tsx            # Punto de entrada
+│   │   └── index.css           # Estilos globales
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── vite.config.ts
+│   ├── index.html
+│   └── .env.example
+├── docker-compose.yml          # Orquestación de servicios
+├── .env.example               # Variables de entorno ejemplo
+├── .gitignore
+└── README.md
+```
+
+## 🔧 Configuración
+
+### Variables de Entorno
+
+#### `.env` en la raíz del proyecto:
+```env
+DATABASE_URL=postgresql://equipos:password123@postgres:5432/equipos_db
+NODE_ENV=development
+PORT=3000
+API_URL=http://localhost:3000
+VITE_API_URL=http://localhost:3000/api
+```
+
+### Estados Disponibles de Equipos
+
+- `Operativo` - El equipo está funcionando correctamente
+- `En Mantenimiento` - El equipo se encuentra bajo mantenimiento
+- `Dañado` - El equipo tiene daños
+- `Inactivo` - El equipo no está en uso
+
+## 🐳 Docker
+
+### Comandos Útiles
+
+```bash
+# Construir y levantar todos los servicios
+docker-compose up --build
+
+# Levantar en segundo plano
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f
+
+# Logs del backend
+docker-compose logs -f backend
+
+# Ver estado de servicios
+docker-compose ps
+
+# Detener servicios
+docker-compose down
+
+# Detener y eliminar volúmenes
+docker-compose down -v
+```
+
+## 🗄️ Base de Datos
+
+### Schema de Equipos
+
+```sql
+CREATE TABLE equipos (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  nombre VARCHAR(255) NOT NULL,
+  marca VARCHAR(255) NOT NULL,
+  estado VARCHAR(50) DEFAULT 'Operativo',
+  numeroSerie VARCHAR(255) UNIQUE NOT NULL,
+  descripcion TEXT,
+  fechaCreacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fechaActualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
+
+## 📦 Dependencias Principales
+
+### Backend
+- **Express**: Framework web minimalista
+- **Prisma**: ORM moderno para SQL
+- **Swagger**: Documentación de API
+- **TypeScript**: Tipado estricto
+- **PostgreSQL**: Base de datos relacional
+
+### Frontend
+- **React 18**: Librería de UI
+- **Vite**: Bundler rápido
+- **Axios**: Cliente HTTP
+- **TypeScript**: Tipado estricto
+
+## ✅ Casos de Uso
+
+1. **Registrar nuevo equipo**: Complete el formulario y haga clic en "Crear"
+2. **Listar equipos**: La tabla se carga automáticamente al abrir la aplicación
+3. **Actualizar estado**: Haga clic en "Editar", cambie el estado y guarde
+4. **Buscar equipo**: Use la tabla para buscar por ID o número de serie
+5. **Eliminar equipo**: Haga clic en "Eliminar" y confirme la acción
+
+## 🔐 Seguridad
+
+- Validación de tipos con TypeScript estricto
+- Validación de entrada en backend
+- Manejo de errores en API y Frontend
+- Variables de entorno para credenciales sensibles
+
+## 🐛 Solución de Problemas
+
+### Error de conexión a base de datos
+```bash
+# Verificar que PostgreSQL esté corriendo
+docker-compose ps
+
+# Revisar logs
+docker-compose logs postgres
+
+# Reiniciar servicios
+docker-compose down
+docker-compose up --build
+```
+
+### Puerto ya en uso
+```bash
+# Cambiar puerto en docker-compose.yml
+# Editar los puertos en los servicios (e.g., "8000:3000")
+```
+
+### Frontend no conecta a API
+- Verificar que `VITE_API_URL` en frontend sea correcto
+- Asegurar que backend esté corriendo (http://localhost:3000)
+- Revisar CORS en backend
+
+## 📝 Notas
+
+- La base de datos se reinicia cuando se ejecuta `docker-compose down -v`
+- Los datos se persisten en el volumen `postgres_data`
+- El frontend se reconstruye automáticamente en cambios (desarrollo)
+
+## 👤 Autor
+
+Desarrollado como prueba técnica - SENATI 4to Ciclo
+
+## 📄 Licencia
+
+MIT
