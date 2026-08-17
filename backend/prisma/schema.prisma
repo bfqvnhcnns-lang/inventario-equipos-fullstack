@@ -8,13 +8,13 @@ generator client {
 }
 
 model Equipo {
-  id        Int     @id @default(autoincrement())
-  nombre    String
-  marca     String
-  estado    String  @default("Operativo")
-  numeroSerie String @unique
-  descripcion String?
-  fechaCreacion DateTime @default(now())
+  id                 Int      @id @default(autoincrement())
+  nombre             String
+  marca              String
+  estado             String   @default("Operativo")
+  numeroSerie        String   @unique
+  descripcion        String?
+  fechaCreacion      DateTime @default(now())
   fechaActualizacion DateTime @updatedAt
 
   @@map("equipos")

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 
-// Configurar fallback por si DATABASE_URL no está definida
-if (!process.env.DATABASE_URL) {
+// Configurar fallback para SQLite en desarrollo local
+if (!process.env.DATABASE_URL || !process.env.DATABASE_URL.startsWith('file:')) {
   process.env.DATABASE_URL = 'file:./dev.db';
 }
 
