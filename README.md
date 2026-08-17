@@ -1,83 +1,73 @@
-# Gestión de Inventario de Equipos de Cómputo
+Gestión de Inventario de Equipos de Cómputo
 
-Sistema web completo de CRUD para la gestión del inventario de equipos de laboratorio, desarrollado con TypeScript, Express, React, PostgreSQL y Docker.
+Sistema web completo de CRUD para la gestión del inventario de equipos de laboratorio del IIAP.
 
-## 🎯 Características
+Desarrollado con TypeScript, Express, React, PostgreSQL y Docker como proyecto de prácticas pre-profesional en SENATI-IQUITOS.
 
-- ✅ **CRUD Completo**: Crear, leer, actualizar y eliminar equipos
-- ✅ **API REST**: Endpoints bien documentados con Swagger/OpenAPI
-- ✅ **Frontend Responsivo**: Interfaz intuitiva con React + TypeScript
-- ✅ **Base de Datos**: PostgreSQL con Prisma ORM
-- ✅ **Dockerizado**: Completamente containerizado con docker-compose
-- ✅ **TypeScript Estricto**: Sin uso de `any`, tipos bien definidos
+---
+
+ Qué es este proyecto?
+
+Es una aplicación web profesional que permite al IIAP administrar sus equipos de cómputo:
+- ✅ Registrar equipos nuevos en la base de datos
+- ✅ Consultar información de equipos existentes
+- ✅ Actualizar datos de equipos (estado, marca, descripción)
+- ✅ Eliminar equipos del inventario
+
+Implementado con arquitectura cliente-servidor moderna**, separando completamente la interfaz gráfica (Frontend) de la lógica de negocio (Backend).
+
+---
 
 ## 📋 Requisitos Previos
 
 - [Docker](https://www.docker.com/) y [Docker Compose](https://docs.docker.com/compose/)
 - Node.js 20+ (solo si deseas ejecutar localmente sin Docker)
 
+---
+
 ## 🚀 Inicio Rápido
 
-### Con Docker (Recomendado)
+### ⭐ Con Docker (Recomendado - La forma profesional)
 
 ```bash
 # 1. Clonar el repositorio
 git clone <tu-repositorio-url>
 cd Prueba_IIAP
 
-# 2. Crear archivo .env (opcional, ya incluye valores por defecto)
-cp .env.example .env
-
-# 3. Levantar toda la aplicación
+# 2. Levantar toda la aplicación con un comando
 docker-compose up --build
 ```
 
-La aplicación estará disponible en:
-- **Frontend**: http://localhost:5173
-- **API**: http://localhost:3000/api
-- **Documentación Swagger**: http://localhost:3000/api/docs
-- **Base de Datos**: localhost:5432
+**Después de unos minutos, la aplicación estará disponible en:**
+
+| Componente | URL |
+|-----------|-----|
+| **Frontend (Interfaz)** | http://localhost:5173 |
+| **API Backend** | http://localhost:3000/api |
+| **Documentación API** | http://localhost:3000/api/docs |
+| **Base de Datos** | localhost:5432 |
 
 ### Sin Docker (Desarrollo Local)
 
 #### Backend
 
 ```bash
-# 1. Navegar al directorio backend
 cd backend
-
-# 2. Instalar dependencias
 npm install
-
-# 3. Configurar variables de entorno
-cp .env.example .env
-# Editar .env y configurar DATABASE_URL apuntando a tu PostgreSQL local
-
-# 4. Ejecutar migraciones de Prisma
-npm run migrate
-
-# 5. Iniciar el servidor
-npm run dev
+npm run dev  # Inicia en puerto 3000
 ```
 
-El backend estará disponible en `http://localhost:3000`
-
-#### Frontend
+#### Frontend (en otra terminal)
 
 ```bash
-# 1. En otra terminal, navegar al directorio frontend
 cd frontend
-
-# 2. Instalar dependencias
 npm install
-
-# 3. Iniciar el servidor de desarrollo
-npm run dev
+npm run dev  # Inicia en puerto 5173
 ```
 
-El frontend estará disponible en `http://localhost:5173`
+---
 
-## 📚 Documentación de API
+##  Documentación de API
 
 La documentación interactiva de Swagger está disponible en:
 
@@ -130,7 +120,7 @@ Content-Type: application/json
 DELETE /api/equipos/:id
 ```
 
-## 🏗️ Estructura del Proyecto
+##  Estructura del Proyecto
 
 ```
 Prueba_IIAP/
@@ -161,7 +151,7 @@ Prueba_IIAP/
 └── README.md
 ```
 
-## 🔧 Configuración
+##  Configuración
 
 ### Variables de Entorno
 
@@ -181,7 +171,7 @@ VITE_API_URL=http://localhost:3000/api
 - `Dañado` - El equipo tiene daños
 - `Inactivo` - El equipo no está en uso
 
-## 🐳 Docker
+##  Docker
 
 ### Comandos Útiles
 
@@ -208,7 +198,7 @@ docker-compose down
 docker-compose down -v
 ```
 
-## 🗄️ Base de Datos
+##  Base de Datos
 
 ### Schema de Equipos
 
@@ -225,7 +215,7 @@ CREATE TABLE equipos (
 );
 ```
 
-## 📦 Dependencias Principales
+##  Dependencias Principales
 
 ### Backend
 - **Express**: Framework web minimalista
@@ -240,7 +230,7 @@ CREATE TABLE equipos (
 - **Axios**: Cliente HTTP
 - **TypeScript**: Tipado estricto
 
-## ✅ Casos de Uso
+##  Casos de Uso
 
 1. **Registrar nuevo equipo**: Complete el formulario y haga clic en "Crear"
 2. **Listar equipos**: La tabla se carga automáticamente al abrir la aplicación
@@ -248,14 +238,14 @@ CREATE TABLE equipos (
 4. **Buscar equipo**: Use la tabla para buscar por ID o número de serie
 5. **Eliminar equipo**: Haga clic en "Eliminar" y confirme la acción
 
-## 🔐 Seguridad
+##  Seguridad
 
 - Validación de tipos con TypeScript estricto
 - Validación de entrada en backend
 - Manejo de errores en API y Frontend
 - Variables de entorno para credenciales sensibles
 
-## 🐛 Solución de Problemas
+## Solución de Problemas
 
 ### Error de conexión a base de datos
 ```bash
@@ -281,16 +271,12 @@ docker-compose up --build
 - Asegurar que backend esté corriendo (http://localhost:3000)
 - Revisar CORS en backend
 
-## 📝 Notas
+##  Notas
 
 - La base de datos se reinicia cuando se ejecuta `docker-compose down -v`
 - Los datos se persisten en el volumen `postgres_data`
 - El frontend se reconstruye automáticamente en cambios (desarrollo)
 
-## 👤 Autor
-
-Desarrollado como prueba técnica - SENATI 4to Ciclo
-
-## 📄 Licencia
+##  Licencia
 
 MIT
