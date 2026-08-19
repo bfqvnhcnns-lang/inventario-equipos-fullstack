@@ -1,21 +1,25 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import { equipoService } from '../services/equipoService';
 
-// Configurar fallback para SQLite en desarrollo local
-if (!process.env.DATABASE_URL || !process.env.DATABASE_URL.startsWith('file:')) {
-  process.env.DATABASE_URL = 'file:./dev.db';
+/**
+ * Helper para extraer mensaje de error de forma segura en TypeScript estricto (sin any).
+ */
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
 }
 
-const prisma = new PrismaClient();
-
-// Listar todos los equipos
-export const getEquipos = async (_req: Request, res: Response): Promise<void> => {
+// Listar equipos (con soporte de búsqueda y paginación)
+export const getEquipos = async (req: Request, res: Response): Promise<void> => {
   try {
-    const equipos = await prisma.equipo.findMany({
-      orderBy: { fechaCreacion: 'desc' },
-    });
-    res.json(equipos);
-  } catch (error: any) {
+    const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 10;
+    const search = (req.query.search as string) || '';
+
+    const result = await equipoService.getEquiposPaginated({ page, limit, search });
+    res.json(result);
+  } catch (error: unknown) {
     console.error('Error al obtener equipos:', error);
     res.status(500).json({ error: 'Error al obtener la lista de equipos' });
   }
@@ -30,9 +34,7 @@ export const getEquipoById = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    const equipo = await prisma.equipo.findUnique({
-      where: { id },
-    });
+    const equipo = await equipoService.getEquipoById(id);
 
     if (!equipo) {
       res.status(404).json({ error: 'Equipo no encontrado' });
@@ -40,7 +42,7 @@ export const getEquipoById = async (req: Request, res: Response): Promise<void> 
     }
 
     res.json(equipo);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error al obtener equipo:', error);
     res.status(500).json({ error: 'Error al consultar los detalles del equipo' });
   }
@@ -51,28 +53,28 @@ export const createEquipo = async (req: Request, res: Response): Promise<void> =
   try {
     const { nombre, marca, estado, numeroSerie, descripcion } = req.body;
 
-    if (!nombre?.trim() || !marca?.trim() || !numeroSerie?.trim()) {
+    if (!nombre || typeof nombre !== 'string' || !nombre.trim() ||
+        !marca || typeof marca !== 'string' || !marca.trim() ||
+        !numeroSerie || typeof numeroSerie !== 'string' || !numeroSerie.trim()) {
       res.status(400).json({ error: 'Por favor complete los campos requeridos: Nombre, Marca y Número de Serie' });
       return;
     }
 
-    const equipo = await prisma.equipo.create({
-      data: {
-        nombre: nombre.trim(),
-        marca: marca.trim(),
-        estado: estado || 'Operativo',
-        numeroSerie: numeroSerie.trim(),
-        descripcion: descripcion ? descripcion.trim() : null,
-      },
+    const equipo = await equipoService.createEquipo({
+      nombre,
+      marca,
+      estado,
+      numeroSerie,
+      descripcion,
     });
 
     res.status(201).json(equipo);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error al crear equipo:', error);
-    if (error.code === 'P2002') {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
       res.status(400).json({ error: 'Ya existe un equipo registrado con este número de serie' });
     } else {
-      res.status(500).json({ error: error.message || 'Error al guardar el equipo' });
+      res.status(500).json({ error: getErrorMessage(error) || 'Error al guardar el equipo' });
     }
   }
 };
@@ -88,27 +90,28 @@ export const updateEquipo = async (req: Request, res: Response): Promise<void> =
 
     const { nombre, marca, estado, numeroSerie, descripcion } = req.body;
 
-    const equipo = await prisma.equipo.update({
-      where: { id },
-      data: {
-        ...(nombre !== undefined && { nombre: nombre.trim() }),
-        ...(marca !== undefined && { marca: marca.trim() }),
-        ...(estado !== undefined && { estado }),
-        ...(numeroSerie !== undefined && { numeroSerie: numeroSerie.trim() }),
-        ...(descripcion !== undefined && { descripcion: descripcion ? descripcion.trim() : null }),
-      },
+    const equipo = await equipoService.updateEquipo(id, {
+      nombre,
+      marca,
+      estado,
+      numeroSerie,
+      descripcion,
     });
 
     res.json(equipo);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error al actualizar equipo:', error);
-    if (error.code === 'P2025') {
-      res.status(404).json({ error: 'Equipo no encontrado' });
-    } else if (error.code === 'P2002') {
-      res.status(400).json({ error: 'Ya existe otro equipo registrado con este número de serie' });
-    } else {
-      res.status(500).json({ error: error.message || 'Error al actualizar el equipo' });
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2025') {
+        res.status(404).json({ error: 'Equipo no encontrado' });
+        return;
+      }
+      if (error.code === 'P2002') {
+        res.status(400).json({ error: 'Ya existe otro equipo registrado con este número de serie' });
+        return;
+      }
     }
+    res.status(500).json({ error: getErrorMessage(error) || 'Error al actualizar el equipo' });
   }
 };
 
@@ -121,14 +124,12 @@ export const deleteEquipo = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    await prisma.equipo.delete({
-      where: { id },
-    });
+    await equipoService.deleteEquipo(id);
 
     res.json({ message: 'Equipo eliminado exitosamente' });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error al eliminar equipo:', error);
-    if (error.code === 'P2025') {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
       res.status(404).json({ error: 'Equipo no encontrado' });
     } else {
       res.status(500).json({ error: 'Error al eliminar el equipo' });

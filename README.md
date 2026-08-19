@@ -1,10 +1,10 @@
-#  Sistema de Gestión de Inventario de Equipos de Cómputo - IIAP
+# 💻 Sistema de Gestión de Inventario de Equipos de Cómputo - IIAP
 
 Sistema web completo **CRUD** desarrollado para la administración del inventario de equipos de cómputo del laboratorio del IIAP. Realizado como **Prueba Técnica para Practicante Preprofesional Full Stack (TypeScript)**.
 
 ---
 
-##  Tabla de Contenidos
+## 📋 Tabla de Contenidos
 1. [Descripción del Proyecto](#-descripción-del-proyecto)
 2. [Tecnologías Utilizadas](#-tecnologías-utilizadas)
 3. [Requisitos Previos](#-requisitos-previos)
@@ -13,42 +13,43 @@ Sistema web completo **CRUD** desarrollado para la administración del inventari
 6. [Variables de Entorno](#-variables-de-entorno)
 7. [Estructura del Proyecto y Git Workflow](#-estructura-del-proyecto-y-git-workflow)
 8. [Endpoints de la API REST](#-endpoints-de-la-api-rest)
+9. [Guía de Exposición oral](#-guía-de-exposición-y-defensa)
 
 ---
 
-##  Descripción del Proyecto
+## 🚀 Descripción del Proyecto
 
 La aplicación permite gestionar el ciclo de vida completo de los equipos del laboratorio:
-*    **Crear:** Registrar nuevos equipos (Laptops, Monitores, Teclados, Servidores, etc.) especificando Nombre, Marca, Estado, Número de Serie y Descripción.
-*  **Listar:** Visualizar todos los equipos registrados con estado visual dinámico.
-*  **Actualizar:** Modificar información de equipos existentes (ej. cambiar estado de "Operativo" a "En Mantenimiento", "Dañado" o "Inactivo").
-*  **Eliminar:** Remover un equipo del inventario previa confirmación.
+* ➕ **Crear:** Registrar nuevos equipos (Laptops, Monitores, Teclados, Servidores, etc.) especificando Nombre, Marca, Estado, Número de Serie y Descripción.
+* 📋 **Listar:** Visualizar todos los equipos registrados con badges de estado visual dinámico y tarjetas KPI.
+* ✏️ **Actualizar:** Modificar información de equipos existentes (ej. cambiar estado de "Operativo" a "En Mantenimiento", "Dañado" o "Inactivo").
+* 🗑️ **Eliminar:** Remover un equipo del inventario previa confirmación.
 
 ---
 
-##  Tecnologías Utilizadas
+## 🛠️ Tecnologías Utilizadas
 
-* **Backend:** Node.js, Express, TypeScript (Modo estricto), Prisma ORM, Swagger / OpenAPI.
+* **Backend:** Node.js, Express, TypeScript (Modo estricto, sin `any`), Prisma ORM, Swagger / OpenAPI 3.0.
 * **Frontend:** React 18, Vite, TypeScript, Axios, HTML5 / CSS3 responsivo.
-* **Base de Datos:** PostgreSQL 16 (Oficial en Docker).
+* **Base de Datos:** PostgreSQL 16 (Imagen oficial en Docker).
 * **Contenedores:** Docker & Docker Compose.
 
 ---
 
-##  Requisitos Previos
+## ⚙️ Requisitos Previos
 
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado y ejecutándose.
 * Git.
 
 ---
 
-##  Instrucciones de Ejecución con Docker
+## 🐳 Instrucciones de Ejecución con Docker
 
-Sigue estos 3 simples pasos para levantar la aplicación completa con **un solo comando**:
+Sigue estos 3 pasos para levantar la aplicación completa con **un solo comando**:
 
 ### Paso 1: Clonar el repositorio
 ```bash
-git clone <URL_DE_TU_REPOSITTORIO_GITHUB>
+git clone <URL_DE_TU_REPOSITORIO_GITHUB>
 cd Prueba_IIAP
 ```
 
@@ -66,24 +67,24 @@ Una vez que los contenedores estén corriendo, la aplicación estará disponible
 
 | Servicio | URL | Descripción |
 | :--- | :--- | :--- |
-|  **Frontend (React)** | `http://localhost:5173` | Interfaz de Usuario |
-|  **Backend API** | `http://localhost:3000/api` | Servidor REST |
-|  **Swagger Docs** | `http://localhost:3000/api/docs` | Documentación interactiva de la API |
-|  **PostgreSQL** | `localhost:5432` | Base de datos relacional |
+| 🌐 **Frontend (React)** | `http://localhost:5173` | Interfaz de Usuario |
+| 📡 **Backend API** | `http://localhost:3000/api` | Servidor REST |
+| 📚 **Swagger Docs** | `http://localhost:3000/api/docs` | Documentación interactiva de la API |
+| 🗄️ **PostgreSQL** | `localhost:5432` | Base de datos relacional |
 
 ---
 
-##  Documentación de la API (Swagger)
+## 📚 Documentación de la API (Swagger)
 
-La API cuenta con documentación interactiva con **OpenAPI 3.0 (Swagger)** accessible directamente desde el navegador en:
+La API cuenta con documentación interactiva **OpenAPI 3.0 (Swagger)** accesible directamente desde el navegador en:
 
- **[http://localhost:3000/api/docs](http://localhost:3000/api/docs)**
+👉 **[http://localhost:3000/api/docs](http://localhost:3000/api/docs)**
 
-Desde la interfaz de Swagger se pueden probar interactiva y directamente todos los endpoints HTTP (GET, POST, PUT, DELETE).
+Desde la interfaz de Swagger se pueden probar interactiva y directamente todos los endpoints HTTP (`GET`, `POST`, `PUT`, `DELETE`).
 
 ---
 
-##  Variables de Entorno
+## 🔑 Variables de Entorno
 
 El proyecto incluye un archivo `.env.example` en la raíz con los valores predeterminados requeridos para el entorno de producción y Docker:
 
@@ -101,15 +102,17 @@ VITE_API_URL=http://localhost:3000/api
 
 ---
 
-##  Estructura del Proyecto y Git Workflow
+## 📁 Estructura del Proyecto y Git Workflow
 
 ### Estructura de Repositorio Monorepo:
 ```
 Prueba_IIAP/
 ├── backend/                  # API REST (Node.js + Express + TypeScript + Prisma)
 │   ├── src/
-│   │   ├── controllers/      # Controladores de la API
-│   │   ├── routes/           # Definición de rutas Express
+│   │   ├── controllers/      # Controladores de la API (HTTP Handler)
+│   │   ├── services/         # Servicios de negocio y acceso a base de datos
+│   │   ├── types/            # DTOs e Interfaces TypeScript
+│   │   ├── routes/           # Rutas Express con Anotaciones JSDoc Swagger
 │   │   └── main.ts           # Punto de entrada de la aplicación
 │   ├── prisma/
 │   │   └── schema.prisma     # Esquema relacional de PostgreSQL
@@ -118,13 +121,14 @@ Prueba_IIAP/
 ├── frontend/                 # Interfaz de Usuario (React + Vite + TypeScript)
 │   ├── src/
 │   │   ├── components/       # Componentes de UI (EquipoTable, etc.)
-│   │   ├── services/         # Cliente HTTP (equipoService)
+│   │   ├── services/         # Cliente HTTP (equipoService con Axios)
 │   │   ├── types/            # Interfaces TypeScript (Equipo, etc.)
-│   │   └── App.tsx           # Componente principal
+│   │   └── App.tsx           # Componente principal con Dashboard y Filtros
 │   ├── Dockerfile
 │   └── package.json
 ├── docker-compose.yml        # Orquestación de 3 servicios (Frontend, Backend, Postgres)
 ├── .env.example
+├── GUIA_EXPOSICION.md        # Guión completo de exposición oral y defensa técnica
 └── README.md
 ```
 
@@ -132,14 +136,14 @@ Prueba_IIAP/
 * `main`: Rama principal estable.
 * `development`: Rama de integración para características.
 * Ramas de Funcionalidades:
-  * `feature/backend-crud`: Implementación de API REST y Prisma.
+  * `feature/backend-crud`: Implementación de API REST, Servicio y Prisma.
   * `feature/swagger-docs`: Documentación de OpenAPI/Swagger.
-  * `feature/frontend-ui`: Desarrollo de la interfaz React en TypeScript.
+  * `feature/frontend-ui`: Desarrollo de la interfaz React en TypeScript con KPIs y Filtros.
   * `fix/docker-config`: Configuración de Dockerfiles y Docker Compose.
 
 ---
 
-##  Endpoints de la API REST
+## 🔌 Endpoints de la API REST
 
 | Método | Endpoint | Descripción | Cuerpo de Petición (JSON) |
 | :--- | :--- | :--- | :--- |
@@ -151,5 +155,12 @@ Prueba_IIAP/
 
 ---
 
-##  Licencia
+## 🎤 Guía de Exposición y Defensa
+
+Para preparar tu presentación oral de 10 minutos y conocer la respuesta a las preguntas técnicas del jurado, consulta el archivo:
+📄 **[GUIA_EXPOSICION.md](file:///c:/Users/Leo/Prueba_IIAP/GUIA_EXPOSICION.md)**
+
+---
+
+## 📄 Licencia
 MIT - Desarrollado para la Prueba Técnica IIAP / SENATI.

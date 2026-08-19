@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Equipo, CreateEquipoInput, UpdateEquipoInput } from '../types/equipo';
+import { Equipo, CreateEquipoInput, UpdateEquipoInput, PaginatedResponse, GetEquiposParams } from '../types/equipo';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -8,11 +8,12 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000,
 });
 
 export const equipoService = {
-  async getAll(): Promise<Equipo[]> {
-    const response = await apiClient.get<Equipo[]>('/equipos');
+  async getAll(params?: GetEquiposParams): Promise<PaginatedResponse<Equipo>> {
+    const response = await apiClient.get<PaginatedResponse<Equipo>>('/equipos', { params });
     return response.data;
   },
 

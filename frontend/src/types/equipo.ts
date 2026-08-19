@@ -30,3 +30,18 @@ export interface ApiResponse<T> {
   error?: string;
   status: number;
 }
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface GetEquiposParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
